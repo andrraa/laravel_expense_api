@@ -14,4 +14,6 @@ Route::middleware(ApiAuthMiddleware::class)->group(function () {
 
     // Category
     Route::post('/categories/create', [CategoryController::class, 'create']);
+    Route::put('/categories/update/{id}', [CategoryController::class, 'update'])
+        ->where('id', '[0-9]+');
 });

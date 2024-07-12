@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryCreateRequest;
+use App\Http\Requests\CategoryUpdateRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Exception;
@@ -43,6 +44,44 @@ class CategoryController extends Controller
             return response()->json([
                 "errors" => [
                     "message" => "Category not created"
+                ]
+            ], 400);
+        } catch (Exception $e) {
+            return response()->json([
+                "errors" => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function update(int $id, CategoryUpdateRequest $request): JsonResponse
+    {
+        $userData = Auth::user();
+
+        $categoryData = $request->validated();
+
+        try {
+            $category = Category::query()->where('id', $id)
+                ->where('user_id', $userData->id)
+                ->first();
+
+            if (!$category) {
+                return response()->json([
+                    "errors" => [
+                        "message" => "Category not found"
+                    ]
+                ], 404);
+            }
+
+            $category->name = ucwords($categoryData['name']);
+            $category->is_active = $categoryData['is_active'];
+
+            if ($category->save()) {
+                return (new CategoryResource($category))->response()->setStatusCode(200);
+            }
+
+            return response()->json([
+                "errors" => [
+                    "message" => "Category not updated"
                 ]
             ], 400);
         } catch (Exception $e) {
