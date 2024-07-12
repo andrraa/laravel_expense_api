@@ -20,4 +20,5 @@ Route::middleware(ApiAuthMiddleware::class)->group(function () {
         ->where('id', '[0-9]+');
     Route::delete('/categories/delete/{id}', [CategoryController::class, 'delete'])
         ->where('id', '[0-9]+');
+    Route::get('/categories', [CategoryController::class, 'index']);
 });

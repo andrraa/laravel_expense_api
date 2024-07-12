@@ -154,4 +154,29 @@ class CategoryController extends Controller
             ], 500);
         }
     }
+
+    public function index(): JsonResponse
+    {
+        $userData = Auth::user();
+
+        try {
+            $categories = $userData->categories->where('is_active', 1);
+
+            if (!$categories) {
+                return response()->json([
+                    "errors" => [
+                        "message" => "Category not found"
+                    ]
+                ], 404);
+            }
+
+            $categoryCollection = CategoryResource::collection($categories);
+
+            return $categoryCollection->response()->setStatusCode(200);
+        } catch (Exception $e) {
+            return response()->json([
+                "errors" => $e->getMessage()
+            ], 500);
+        }
+    }
 }
