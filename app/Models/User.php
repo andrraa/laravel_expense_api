@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Model implements Authenticatable
@@ -23,6 +24,11 @@ class User extends Model implements Authenticatable
     public function token(): HasOne
     {
         return $this->hasOne(Token::class);
+    }
+
+    public function categories(): HasMany
+    {
+        return $this->hasMany(Category::class);
     }
 
     public function getAuthIdentifierName(): string
