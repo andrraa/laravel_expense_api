@@ -117,4 +117,41 @@ class CategoryController extends Controller
             ], 500);
         }
     }
+
+    public function delete(int $id): JsonResponse
+    {
+        $userData = Auth::user();
+
+        try {
+            $checkData = Category::query()
+                ->where('id', $id)
+                ->where('user_id', $userData->id)
+                ->where('is_active', 1)
+                ->first();
+
+            if (!$checkData) {
+                return response()->json([
+                    "errors" => [
+                        "message" => "Category not found"
+                    ]
+                ], 404);
+            }
+
+            $checkData->is_active = 0;
+
+            if ($checkData->save()) {
+                return response()->json()->setStatusCode(204);
+            }
+
+            return response()->json([
+                "errors" => [
+                    "message" => "Category not deleted"
+                ]
+            ], 400);
+        } catch (Exception $e) {
+            return response()->json([
+                "errors" => $e->getMessage()
+            ], 500);
+        }
+    }
 }
