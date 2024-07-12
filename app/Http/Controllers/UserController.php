@@ -94,4 +94,27 @@ class UserController extends Controller
 
         return new UserResource($user);
     }
+
+    public function logout(): JsonResponse
+    {
+        try {
+            $user = Auth::user();
+            $token = $user->token;
+
+            if ($token) {
+                $token->token = null;
+                $token->save();
+
+                return response()->json()->setStatusCode(204);
+            }
+
+            return response()->json()->setStatusCode(401);
+        } catch (Exception $e) {
+            return response()->json([
+                "errors" => [
+                    "message" => $e->getMessage()
+                ]
+            ], 500);
+        }
+    }
 }
