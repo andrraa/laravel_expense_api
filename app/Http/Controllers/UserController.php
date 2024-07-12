@@ -88,11 +88,21 @@ class UserController extends Controller
         }
     }
 
-    public function profile(): UserResource
+    public function profile(): JsonResponse
     {
-        $user = Auth::user();
+        try {
+            $user = Auth::user();
 
-        return new UserResource($user);
+            return (new UserResource($user))
+                ->response()
+                ->setStatusCode(200);
+        } catch (Exception $e) {
+            return response()->json([
+                "errors" => [
+                    "message" => $e->getMessage()
+                ]
+            ], 500);
+        }
     }
 
     public function logout(): JsonResponse
