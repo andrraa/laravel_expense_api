@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -85,5 +86,12 @@ class UserController extends Controller
                 ]
             ], 500);
         }
+    }
+
+    public function profile(): UserResource
+    {
+        $user = Auth::user();
+
+        return new UserResource($user);
     }
 }
