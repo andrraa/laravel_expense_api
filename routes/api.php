@@ -35,6 +35,7 @@ Route::middleware(ApiAuthMiddleware::class)->group(function () {
     Route::delete('/expenses/delete/{id}', [ExpenseController::class, 'delete'])
         ->where('id', '[0-9]+');
     Route::get('/expenses', [ExpenseController::class, 'index']);
+    Route::get('/expenses/types', [ExpenseController::class, 'expenseType']);
 
     // Data
     Route::get('/datas/total', [DataController::class, 'getTotalExpense']);

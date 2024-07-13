@@ -6,6 +6,7 @@ use App\Http\Requests\ExpenseCreateRequest;
 use App\Http\Requests\ExpenseUpdateRequest;
 use App\Http\Resources\ExpenseResource;
 use App\Models\Expense;
+use App\Models\ExpenseType;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -160,6 +161,29 @@ class ExpenseController extends Controller
             $expenseCollection = ExpenseResource::collection($expenses);
 
             return $expenseCollection->response()->setStatusCode(200);
+        } catch (Exception $e) {
+            return response()->json([
+                "errors" => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function expenseType(): JsonResponse
+    {
+        Auth::user();
+
+        try {
+            $expense = ExpenseType::query()->get()->all();
+
+            if (!$expense) {
+                return response()->json([
+                    "errors" => [
+                        "message" => "Expense type not found"
+                    ]
+                ], 404);
+            }
+
+            return response()->json($expense);
         } catch (Exception $e) {
             return response()->json([
                 "errors" => $e->getMessage()
