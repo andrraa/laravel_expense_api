@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DataController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\ApiAuthMiddleware;
@@ -34,4 +35,7 @@ Route::middleware(ApiAuthMiddleware::class)->group(function () {
     Route::delete('/expenses/delete/{id}', [ExpenseController::class, 'delete'])
         ->where('id', '[0-9]+');
     Route::get('/expenses', [ExpenseController::class, 'index']);
+
+    // Data
+    Route::get('/datas/total', [DataController::class, 'getTotalExpense']);
 });
