@@ -25,4 +25,6 @@ Route::middleware(ApiAuthMiddleware::class)->group(function () {
 
     // Expense
     Route::post('/expenses/create', [ExpenseController::class, 'create']);
+    Route::put('/expenses/update/{id}', [ExpenseController::class, 'update'])
+        ->where('id', '[0-9]+');
 });
