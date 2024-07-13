@@ -141,4 +141,29 @@ class ExpenseController extends Controller
             ], 500);
         }
     }
+
+    public function index(): JsonResponse
+    {
+        $userData = Auth::user();
+
+        try {
+            $expenses = $userData->expenses;
+
+            if (!$expenses) {
+                return response()->json([
+                    "errors" => [
+                        "messaage" => "Expense not found"
+                    ]
+                ])->setStatusCode(404);
+            }
+
+            $expenseCollection = ExpenseResource::collection($expenses);
+
+            return $expenseCollection->response()->setStatusCode(200);
+        } catch (Exception $e) {
+            return response()->json([
+                "errors" => $e->getMessage()
+            ], 500);
+        }
+    }
 }

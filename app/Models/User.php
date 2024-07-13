@@ -31,6 +31,11 @@ class User extends Model implements Authenticatable
         return $this->hasMany(Category::class);
     }
 
+    public function expenses(): HasMany
+    {
+        return $this->hasMany(Expense::class);
+    }
+
     public function getAuthIdentifierName(): string
     {
         return 'username';

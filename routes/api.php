@@ -33,4 +33,5 @@ Route::middleware(ApiAuthMiddleware::class)->group(function () {
         ->where('id', '[0-9]+');
     Route::delete('/expenses/delete/{id}', [ExpenseController::class, 'delete'])
         ->where('id', '[0-9]+');
+    Route::get('/expenses', [ExpenseController::class, 'index']);
 });
