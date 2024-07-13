@@ -38,4 +38,5 @@ Route::middleware(ApiAuthMiddleware::class)->group(function () {
 
     // Data
     Route::get('/datas/total', [DataController::class, 'getTotalExpense']);
+    Route::get('/datas/total/by-category', [DataController::class, 'getTotalExpenseByCategory']);
 });
