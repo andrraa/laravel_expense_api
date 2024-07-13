@@ -81,4 +81,30 @@ class ExpenseController extends Controller
             ], 500);
         }
     }
+
+    public function view(int $id): JsonResponse
+    {
+        $userData = Auth::user();
+
+        try {
+            $expenseData = Expense::query()
+                ->where('id', $id)
+                ->where('user_id', $userData->id)
+                ->first();
+
+            if (!$expenseData) {
+                return response()->json([
+                    "errors" => [
+                        "message" => "Expense not found"
+                    ]
+                ])->setStatusCode(404);
+            }
+
+            return (new ExpenseResource($expenseData))->response()->setStatusCode(200);
+        } catch (Exception $e) {
+            return response()->json([
+                "errors" => $e->getMessage()
+            ], 500);
+        }
+    }
 }
