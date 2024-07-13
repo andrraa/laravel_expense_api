@@ -30,10 +30,10 @@ class CategoryUpdateRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation(Validator $validator): HttpResponseException
+    protected function failedValidation(Validator $validator)
     {
-        return new HttpResponseException(response([
-            "message" => $validator->errors()
-        ]));
+        throw new HttpResponseException(response()->json([
+            'errors' => $validator->errors()
+        ], 400));
     }
 }
