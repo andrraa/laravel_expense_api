@@ -6,10 +6,12 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\ApiAuthMiddleware;
 use Illuminate\Support\Facades\Route;
 
+// User
 Route::post('/users/register', [UserController::class, 'register']);
 Route::post('/users/login', [UserController::class, 'login']);
 
 Route::middleware(ApiAuthMiddleware::class)->group(function () {
+    // User
     Route::get('/users/profile', [UserController::class, 'profile']);
     Route::delete('/users/logout', [UserController::class, 'logout']);
 
@@ -28,5 +30,7 @@ Route::middleware(ApiAuthMiddleware::class)->group(function () {
     Route::put('/expenses/update/{id}', [ExpenseController::class, 'update'])
         ->where('id', '[0-9]+');
     Route::get('/expenses/view/{id}', [ExpenseController::class, 'view'])
+        ->where('id', '[0-9]+');
+    Route::delete('/expenses/delete/{id}', [ExpenseController::class, 'delete'])
         ->where('id', '[0-9]+');
 });

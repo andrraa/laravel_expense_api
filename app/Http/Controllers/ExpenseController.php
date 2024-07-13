@@ -107,4 +107,38 @@ class ExpenseController extends Controller
             ], 500);
         }
     }
+
+    public function delete(int $id): JsonResponse
+    {
+        $userData = Auth::user();
+
+        try {
+            $expenseData = Expense::query()
+                ->where('id', $id)
+                ->where('user_id', $userData->id)
+                ->first();
+
+            if (!$expenseData) {
+                return response()->json([
+                    "errors" => [
+                        "message" => "Expense not found"
+                    ]
+                ])->setStatusCode(404);
+            }
+
+            if ($expenseData->delete()) {
+                return response()->json()->setStatusCode(204);
+            }
+
+            return response()->json([
+                "errors" => [
+                    "message" => "Failed to delete expense"
+                ]
+            ])->setStatusCode(400);
+        } catch (Exception $e) {
+            return response()->json([
+                "errors" => $e->getMessage()
+            ], 500);
+        }
+    }
 }
