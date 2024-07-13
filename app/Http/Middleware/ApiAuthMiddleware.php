@@ -20,13 +20,21 @@ class ApiAuthMiddleware
         $token = $request->header('Authorization');
 
         if (!$token) {
-            return response()->json()->setStatusCode(401);
+            return response()->json([
+                "errors" => [
+                    "message" => "Unauthorized"
+                ]
+            ])->setStatusCode(401);
         }
 
         $tokenData = Token::query()->where('token', $token)->first();
 
         if (!$tokenData || !$tokenData->user) {
-            return response()->json()->setStatusCode(401);
+            return response()->json([
+                "errors" => [
+                    "message" => "Unauthorized"
+                ]
+            ])->setStatusCode(401);
         }
 
         Auth::login($tokenData->user);
