@@ -173,7 +173,7 @@ class ExpenseController extends Controller
         Auth::user();
 
         try {
-            $expense = ExpenseType::query()->get()->all();
+            $expense = ExpenseType::all();
 
             if (!$expense) {
                 return response()->json([
@@ -183,7 +183,9 @@ class ExpenseController extends Controller
                 ], 404);
             }
 
-            return response()->json($expense);
+            return response()->json([
+                "data" => $expense
+            ]);
         } catch (Exception $e) {
             return response()->json([
                 "errors" => $e->getMessage()
