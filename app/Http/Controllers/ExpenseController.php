@@ -148,7 +148,7 @@ class ExpenseController extends Controller
         $userData = Auth::user();
 
         try {
-            $expenses = $userData->expenses;
+            $expenses = $userData->expenses()->with('category')->orderBy('created_at', 'desc')->get();
 
             if (!$expenses) {
                 return response()->json([
